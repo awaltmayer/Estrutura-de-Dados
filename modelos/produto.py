@@ -8,3 +8,5 @@ class Produto:
 
     def __str__(self):
         return f"GTIN: {self.id_produto} | Bebida: {self.nome} | Quantidade: {self.quantidade} | Preço: R$ {self.preco:.2f}"
+    
+    #bebidas do estoque

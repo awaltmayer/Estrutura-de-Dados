@@ -9,3 +9,5 @@ class Venda:
 
     def __str__(self):
         return f"Venda {self.id_venda} | Cliente: {self.id_cliente} | Produto: {self.id_produto} | Quantidade: {self.quantidade} | Total: R$ {self.valor_total:.2f}"
+
+    #registro das vendas

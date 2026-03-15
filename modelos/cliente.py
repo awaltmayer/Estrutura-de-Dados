@@ -7,3 +7,4 @@ class Cliente:
     def __str__(self):
         return f"cadastro: {self.id_cliente} | Nome: {self.nome}"
     
+    #cadastro dos clientes
