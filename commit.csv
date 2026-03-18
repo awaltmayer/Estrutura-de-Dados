@@ -1,0 +1,7 @@
+feat: adiciona utilitários para manipulação de arquivos CSV
+
+- Cria função garantir_arquivo para inicializar CSV com cabeçalho
+- Implementa leitura de dados com ler_csv (ignorando cabeçalho)
+- Adiciona salvar_csv para sobrescrever arquivo com novos dados
+- Trata arquivos inexistentes com segurança
+- Utiliza encoding UTF-8 para compatibilidade
