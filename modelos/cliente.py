@@ -1,10 +1,10 @@
-class Cliente:
+from dataclasses import dataclass
 
-    def __init__(self, id_cliente, nome):
-        self.id_cliente = id_cliente
-        self.nome = nome
-    
-    def __str__(self):
-        return f"cadastro: {self.id_cliente} | Nome: {self.nome}"
-    
-    #cadastro dos clientes
+
+@dataclass
+class Cliente:
+    id_cliente: int
+    nome: str
+
+    def __str__(self) -> str:
+        return f"Cadastro: {self.id_cliente} | Nome: {self.nome}"

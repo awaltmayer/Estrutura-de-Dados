@@ -1,19 +1,19 @@
+from typing import Any, Optional, Tuple
+
+
 class PilhaOperacoes:
 
-    def __init__(self):
-        self.operacoes = []
+    def __init__(self) -> None:
+        self.operacoes: list[Tuple[str, Any]] = []
 
-    def empilhar(self, operacao):
+    def empilhar(self, operacao: Tuple[str, Any]) -> None:
         self.operacoes.append(operacao)
 
-    def desempilhar(self):
-
-        if len(self.operacoes) == 0:
+    def desempilhar(self) -> Optional[Tuple[str, Any]]:
+        if not self.operacoes:
             return None
-
         return self.operacoes.pop()
 
-    def esta_vazia(self):
+    def esta_vazia(self) -> bool:
         return len(self.operacoes) == 0
 
-#desfaz a ultima operaçao

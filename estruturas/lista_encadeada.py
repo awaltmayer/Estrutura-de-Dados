@@ -1,90 +1,56 @@
-class No:
+from typing import Any, Optional
 
-    def __init__(self, dado):
+
+class No:
+    def __init__(self, dado: Any) -> None:
         self.dado = dado
-        self.proximo = None
+        self.proximo: Optional["No"] = None
 
 
 class ListaEncadeada:
 
-    def __init__(self):
-        self.inicio = None
+    def __init__(self) -> None:
+        self.inicio: Optional[No] = None
 
-
-    def inserir(self, dado):
-
+    def inserir(self, dado: Any) -> None:
         novo_no = No(dado)
-
         if self.inicio is None:
             self.inicio = novo_no
             return
-
         atual = self.inicio
-
         while atual.proximo:
             atual = atual.proximo
-
         atual.proximo = novo_no
 
-
-    def listar(self):
-
+    def listar(self) -> None:
         if self.inicio is None:
             print("Lista vazia")
             return
-
         atual = self.inicio
-
         while atual:
             print(atual.dado)
             atual = atual.proximo
 
-
-    def buscar_por_id(self, id_busca):
-
+    def buscar_por_id(self, id_busca: int, atributo: str) -> Optional[Any]:
         atual = self.inicio
-
         while atual:
-
             dado = atual.dado
-
-            if hasattr(dado, "id_produto") and dado.id_produto == id_busca:
+            if hasattr(dado, atributo) and getattr(dado, atributo) == id_busca:
                 return dado
-
-            if hasattr(dado, "id_cliente") and dado.id_cliente == id_busca:
-                return dado
-
             atual = atual.proximo
-
         return None
 
-
-    def remover_por_id(self, id_remover):
-
+    def remover_por_id(self, id_remover: int, atributo: str) -> bool:
         atual = self.inicio
         anterior = None
-
         while atual:
-
             dado = atual.dado
-
-            if hasattr(dado, "id_produto") and dado.id_produto == id_remover:
-                break
-
-            if hasattr(dado, "id_cliente") and dado.id_cliente == id_remover:
-                break
-
+            if hasattr(dado, atributo) and getattr(dado, atributo) == id_remover:
+                if anterior is None:
+                    self.inicio = atual.proximo
+                else:
+                    anterior.proximo = atual.proximo
+                return True
             anterior = atual
             atual = atual.proximo
-
-        if atual is None:
-            return False
-
-        if anterior is None:
-            self.inicio = atual.proximo
-        else:
-            anterior.proximo = atual.proximo
-
-        return True
-
-#armazena produtos e clientes usando uma lista encadeada
+        return False

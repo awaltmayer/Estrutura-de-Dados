@@ -1,12 +1,12 @@
+from dataclasses import dataclass
+
+
+@dataclass
 class Produto:
+    id_produto: int
+    nome: str
+    quantidade: int
+    preco: float
 
-    def __init__(self, id_produto, nome, quantidade, preco):
-        self.id_produto = id_produto
-        self.nome = nome
-        self.quantidade = quantidade
-        self.preco = preco
-
-    def __str__(self):
+    def __str__(self) -> str:
         return f"GTIN: {self.id_produto} | Bebida: {self.nome} | Quantidade: {self.quantidade} | Preço: R$ {self.preco:.2f}"
-    
-    #bebidas do estoque
