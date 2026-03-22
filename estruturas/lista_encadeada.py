@@ -40,6 +40,16 @@ class ListaEncadeada:
             atual = atual.proximo
         return None
 
+    def buscar_por_nome(self, termo: str) -> list:
+        encontrados = []
+        atual = self.inicio
+        while atual:
+            dado = atual.dado
+            if hasattr(dado, "nome") and termo.lower() in dado.nome.lower():
+                encontrados.append(dado)
+            atual = atual.proximo
+        return encontrados
+
     def remover_por_id(self, id_remover: int, atributo: str) -> bool:
         atual = self.inicio
         anterior = None

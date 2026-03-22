@@ -112,7 +112,6 @@ def cadastrar_cliente() -> None:
     except ValueError:
         erro("Entrada invalida - ID deve ser um numero inteiro")
 
-
 def listar_clientes() -> None:
     mostrar_clientes(lista_clientes)
 
@@ -151,23 +150,28 @@ def cadastrar_produto() -> None:
     except ValueError:
         erro("Entrada invalida - verifique os campos numericos")
 
-
 def listar_produtos() -> None:
     mostrar_produtos(lista_produtos)
 
-
 def pesquisar_produto() -> None:
-    try:
-        id_produto = int(input("ID produto: "))
-        produto = lista_produtos.buscar_por_id(id_produto, "id_produto")
+    termo = input("Buscar por nome ou ID: ").strip()
 
+    if not termo:
+        erro("Digite um nome ou ID para pesquisar")
+        return
+
+    if termo.isdigit():
+        produto = lista_produtos.buscar_por_id(int(termo), "id_produto")
         if produto:
-            console.print(produto)
-        else:
-            erro("Produto nao encontrado")
+            console.print(str(produto))
+            return
 
-    except ValueError:
-        erro("Entrada invalida")
+    encontrados = lista_produtos.buscar_por_nome(termo)
+    if encontrados:
+        for p in encontrados:
+            console.print(str(p))
+    else:
+        erro("Nenhum produto encontrado")
 
 def realizar_venda() -> None:
     try:
@@ -214,13 +218,12 @@ def realizar_venda() -> None:
     except ValueError:
         erro("Entrada invalida - verifique os campos numericos")
 
-
 def ver_fila_vendas() -> None:
     if not fila_vendas.vendas:
         aviso("Nenhuma venda registrada")
         return
     for venda in fila_vendas.vendas:
-        console.print(venda)
+        console.print(str(venda))
 
 def desfazer_operacao() -> None:
 
@@ -321,8 +324,7 @@ def main() -> None:
         elif opcao == "11":
             clientes_valores_gastos()
         elif opcao == "12":
-            salvar_dados()
-            sucesso("Dados salvos. Encerrando...")
+            sucesso("Encerrando...")
             break
         else:
             aviso("Opcao invalida - escolha entre 1 e 12")

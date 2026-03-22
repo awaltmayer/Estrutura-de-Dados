@@ -16,4 +16,3 @@ class PilhaOperacoes:
 
     def esta_vazia(self) -> bool:
         return len(self.operacoes) == 0
-

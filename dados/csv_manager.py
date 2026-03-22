@@ -1,46 +1,58 @@
 import csv
 import os
+import tempfile
+import logging
+from typing import List
 
-def garantir_arquivo(nome_arquivo, cabecalho):
-    """Cria o arquivo com cabeçalho apenas se ele não existir."""
+logger = logging.getLogger(__name__)
+
+
+def garantir_arquivo(nome_arquivo: str, cabecalho: List[str]) -> None:
     if not os.path.exists(nome_arquivo):
         try:
+            os.makedirs(os.path.dirname(nome_arquivo), exist_ok=True)
             with open(nome_arquivo, "w", newline="", encoding="utf-8") as arquivo:
                 escritor = csv.writer(arquivo)
                 escritor.writerow(cabecalho)
         except IOError as e:
-            print(f"Erro ao criar o arquivo {nome_arquivo}: {e}")
+            logger.error(f"Erro ao criar o arquivo {nome_arquivo}: {e}")
 
-def ler_csv(nome_arquivo):
-    """Lê os dados do CSV, ignorando o cabeçalho, com tratamento de erros."""
-    dados = []
+
+def ler_csv(nome_arquivo: str) -> List[List[str]]:
+    dados: List[List[str]] = []
     if not os.path.exists(nome_arquivo):
         return dados
-
     try:
         with open(nome_arquivo, "r", newline="", encoding="utf-8") as arquivo:
             leitor = csv.reader(arquivo)
-            next(leitor, None)  # Pula o cabeçalho com segurança
+            next(leitor, None)
             for linha in leitor:
-                if linha:  # Ignora linhas vazias acidentais
+                if linha:
                     dados.append(linha)
     except IOError as e:
-        print(f"Erro ao ler o arquivo {nome_arquivo}: {e}")
-    
+        logger.error(f"Erro ao ler o arquivo {nome_arquivo}: {e}")
     return dados
 
-def salvar_csv(nome_arquivo, cabecalho, dados):
-    """Sobrescreve o arquivo CSV de forma eficiente."""
-    try:
-        with open(nome_arquivo, "w", newline="", encoding="utf-8") as arquivo:
-            escritor = csv.writer(arquivo)
-            escritor.writerow(cabecalho)
-            escritor.writerows(dados) 
-    except IOError as e:
-        print(f"Erro ao salvar o arquivo {nome_arquivo}: {e}")
 
-# --- MELHORIAS IMPLEMENTADAS ---
-# Robustez: Adicionado try-except contra erros de permissão ou arquivos abertos.
-# Performance: Uso de writerows para gravação em lote (mais rápido).
-# Segurança: Proteção contra arquivos vazios e filtragem de linhas em branco.
-# Estabilidade: Retorno garantido de lista para evitar erros em cadeia.
+def salvar_csv(nome_arquivo: str, cabecalho: List[str], dados: List[List]) -> None:
+    dir_destino = os.path.dirname(nome_arquivo) or "."
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            newline="",
+            encoding="utf-8",
+            dir=dir_destino,
+            delete=False,
+            suffix=".tmp"
+        ) as tmp:
+            escritor = csv.writer(tmp)
+            escritor.writerow(cabecalho)
+            escritor.writerows(dados)
+            tmp_path = tmp.name
+
+        os.replace(tmp_path, nome_arquivo)
+
+    except IOError as e:
+        logger.error(f"Erro ao salvar o arquivo {nome_arquivo}: {e}")
+        if "tmp_path" in dir() and os.path.exists(tmp_path):
+            os.remove(tmp_path)
